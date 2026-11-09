@@ -209,6 +209,7 @@ aside.right h3 {
 }
 aside.right h3:first-child { margin-top: 0; border: none; }
 aside.right ul { list-style: none; padding: 0; }
+#sectionToc { max-height: 42vh; overflow-y: auto; padding-right: 0.3em; }
 aside.right li { margin: 0.4em 0; font-size: 0.88rem; }
 aside.right a { color: var(--text-link); border-bottom: 1px dotted transparent; }
 aside.right a:hover { color: var(--accent-hover); border-bottom-style: dotted; }
@@ -353,7 +354,7 @@ aside.right .footnote {
           <h3>1.2. «Сильный» и «слабый» ИИ</h3>
           <ul>
             <li><strong>Слабый ИИ (narrow AI)</strong> — системы, решающие конкретные задачи (распознавание лиц, перевод текстов, управление роботом). Они не обладают самосознанием и не могут перенести навык из одной области в другую.</li>
-            <li><strong>Сильный ИИ (general AI)</strong> — гипотетическая система с интеллектом уровня человека или выше, способная к обобщению,自我обучению и решению неизвестных заранее задач.</li>
+            <li><strong>Сильный ИИ (general AI)</strong> — гипотетическая система с интеллектом уровня человека или выше, способная к обобщению,самообучению и решению неизвестных заранее задач.</li>
           </ul>
           <p>На сегодняшний день созданы только системы слабого ИИ. Путь к сильному ИИ блокирован рядом теоретических и практических проблем, о которых пойдёт речь в разделе 8.</p>
         </div>
@@ -389,7 +390,7 @@ aside.right .footnote {
         </div>
 
         <div class="concept">
-          <h3>2.2. Математическая модель нейрона (МакКоллок — Питтс, 1943)</h3>
+          <h3>2.2. Математическая модель нейрона (Маккаллок — Питтс, 1943)</h3>
           <p>Первая формальная модель нейрона представила его как простой процессор с несколькими входами и одним выходом. Модель состоит из трёх функциональных блоков:</p>
           <div class="formula">
             net = Σ (wᵢ × xᵢ)<br>
@@ -402,7 +403,7 @@ aside.right .footnote {
             <li><strong>Блок суммирования</strong> — вычисляет взвешенную сумму.</li>
             <li><strong>Блок нелинейного преобразования</strong> — пороговая функция (все или ничего).</li>
           </ul>
-          <p class="key-idea"><strong>Важно:</strong> модель МакКоллока — Питтс использует бинарную активацию. Реальный нейрон работает с аналоговыми сигналами, поэтому последующие модели добавили плавные функции активации.</p>
+          <p class="key-idea"><strong>Важно:</strong> модель Маккаллока — Питтса использует бинарную активацию. Реальный нейрон работает с аналоговыми сигналами, поэтому последующие модели добавили плавные функции активации.</p>
         </div>
 
         <div class="concept">
@@ -739,7 +740,7 @@ aside.right .footnote {
       <!-- ===== РАЗДЕЛ 9: Архив ===== -->
       <section id="sec-files">
         <h1>9. Архив первоисточников</h1>
-        <p>Полные тексты статей, презентации и аудиозаписи семинаров хранятся в разделе «Архив первоисточников» этого репозитория (папка <code>knowledge-base/ailab.ru/pages/</code>).</p>
+        <p>Полные тексты статей, презентации и аудиозаписи семинаров хранятся в разделе «Архив первоисточников» этого репозитория (папка <a href="../knowledge-base/ailab.ru/pages/"><code>knowledge-base/ailab.ru/pages/</code></a>).</p>
         <ul>
           <li><strong>91 статья</strong> в формате markdown с полными текстами исследований.</li>
           <li><strong>Индекс файлов</strong> — около 130 загружаемых файлов (презентации, аудио, архивы, документация).</li>
@@ -792,10 +793,11 @@ aside.right .footnote {
         <h3>Сноски</h3>
         <div class="footnote">Учебник собран на базе материалов открытых исследований и семинаров. Авторы первоисточников указаны в разделах.</div>
         <div class="footnote">Полные тексты статей хранятся в архиве первоисточников этого репозитория.</div>
-        <div class="footnote">Учебник распространяется открыто. GitHub Pages: включите Pages в настройках репозитория.</div>
+        <div class="footnote">Учебник распространяется открыто; материалы приведены с указанием авторства.</div>
       </div>
     </aside>
   </div>
+</div>
 
 <script>
 const themeToggle = document.getElementById('themeToggle');
@@ -824,13 +826,15 @@ themeToggle.addEventListener('click', () => {
 const navLinks = document.querySelectorAll('.nav-link');
 const sections = document.querySelectorAll('main.center section');
 const sectionToc = document.getElementById('sectionToc');
+let tocIndex = 0;
 sections.forEach(section => {
-  const h2s = section.querySelectorAll('h2');
-  h2s.forEach(h2 => {
+  const heads = section.querySelectorAll('h3');
+  heads.forEach(h3 => {
+    if (!h3.id) h3.id = 'toc-' + (++tocIndex);
     const li = document.createElement('li');
     const a = document.createElement('a');
-    a.href = '#' + h2.id;
-    a.textContent = h2.textContent;
+    a.href = '#' + h3.id;
+    a.textContent = h3.textContent;
     li.appendChild(a);
     sectionToc.appendChild(li);
   });
