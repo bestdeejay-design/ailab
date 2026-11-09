@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Искусственный интеллект: от биологических нейронов к когнитивным системам — открытый учебник</title>
+<style>
+/* ============================================================
+   CSS Variables — темы (светлая / темная)
+   ============================================================ */
+:root {
+  --bg-page: #f5f7fa;
+  --bg-sidebar: #ffffff;
+  --bg-content: #ffffff;
+  --bg-right: #f8fafc;
+  --text-main: #1e293b;
+  --text-muted: #64748b;
+  --text-link: #2563eb;
+  --border: #e2e8f0;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --code-bg: #f1f5f9;
+  --quote-bg: #f0f9ff;
+  --quote-border: #0ea5e9;
+  --nav-hover: #f1f5f9;
+  --nav-active: #dbeafe;
+  --shadow: 0 1px 3px rgba(0,0,0,0.08);
+  --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+[data-theme="dark"] {
+  --bg-page: #0f172a;
+  --bg-sidebar: #1e293b;
+  --bg-content: #0f172a;
+  --bg-right: #1e293b;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --text-link: #60a5fa;
+  --border: #334155;
+  --accent: #60a5fa;
+  --accent-hover: #3b82f6;
+  --code-bg: #1e293b;
+  --quote-bg: #1e1b4b;
+  --quote-border: #818cf8;
+  --nav-hover: #334155;
+  --nav-active: #1e3a8a;
+  --shadow: 0 1px 3px rgba(0,0,0,0.4);
+}
+
+/* ============================================================
+   Базовые стили
+   ============================================================ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-stack);
+  background: var(--bg-page);
+  color: var(--text-main);
+  line-height: 1.6;
+  transition: background 0.3s, color 0.3s;
+}
+a { color: var(--text-link); text-decoration: none; }
+a:hover { text-decoration: underline; color: var(--accent-hover); }
+h1, h2, h3, h4 { line-height: 1.3; margin-top: 1.5em; }
+h1 { font-size: 2rem; }
+h2 { font-size: 1.5rem; border-bottom: 2px solid var(--border); padding-bottom: 0.3em; }
+h3 { font-size: 1.25rem; }
+h4 { font-size: 1.1rem; color: var(--text-muted); }
+p { margin: 0.8em 0; }
+ul, ol { margin: 0.8em 0 0.8em 1.5em; }
+li { margin: 0.3em 0; }
+code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; background: var(--code-bg); padding: 0.15em 0.4em; border-radius: 4px; font-size: 0.9em; }
+pre { background: var(--code-bg); padding: 1em; border-radius: 6px; overflow-x: auto; margin: 1em 0; }
+img { max-width: 100%; height: auto; border-radius: 6px; }
+blockquote {
+  border-left: 4px solid var(--quote-border);
+  background: var(--quote-bg);
+  padding: 0.8em 1em;
+  margin: 1em 0;
+  border-radius: 0 6px 6px 0;
+  font-style: italic;
+  color: var(--text-main);
+}
+.small { font-size: 0.9em; color: var(--text-muted); }
+.tag {
+  display: inline-block;
+  font-size: 0.78em;
+  padding: 0.15em 0.5em;
+  border-radius: 999px;
+  background: var(--border);
+  color: var(--text-muted);
+  margin-right: 0.4em;
+}
+
+/* ============================================================
+   Тема переключатель
+   ============================================================ */
+.theme-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 1000;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border);
+  color: var(--text-main);
+  padding: 0.6em 1em;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+.theme-toggle:hover { background: var(--nav-hover); }
+
+/* ============================================================
+   Макет в три колонки
+   ============================================================ */
+.wrapper {
+  display: grid;
+  grid-template-columns: 260px 1fr 280px;
+  grid-template-rows: auto 1fr;
+  gap: 0;
+  min-height: 100vh;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+header {
+  grid-column: 1 / -1;
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border);
+  padding: 1.5rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--shadow);
+}
+header h1 { font-size: 1.75rem; margin: 0; }
+header p.subtitle { color: var(--text-muted); font-size: 0.95rem; margin-top: 0.3rem; }
+
+nav.left {
+  grid-column: 1;
+  grid-row: 2;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem 1rem;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  height: calc(100vh - 2rem);
+}
+nav.left h3 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin: 1.5em 0 0.8em;
+  padding-bottom: 0.4em;
+  border-bottom: 1px solid var(--border);
+}
+nav.left ul { list-style: none; padding: 0; }
+nav.left li { margin: 0.3em 0; }
+nav.left a {
+  display: block;
+  padding: 0.55em 0.8em;
+  border-radius: 6px;
+  color: var(--text-main);
+  font-size: 0.92rem;
+}
+nav.left a:hover { background: var(--nav-hover); color: var(--accent); text-decoration: none; }
+nav.left a.active { background: var(--nav-active); color: var(--accent); font-weight: 600; }
+
+main.center {
+  grid-column: 2;
+  grid-row: 2;
+  background: var(--bg-content);
+  padding: 2rem 3rem;
+  overflow-y: auto;
+  border-left: 1px solid var(--border);
+  border-right: 1px solid var(--border);
+  max-width: none;
+}
+main.center h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+main.center h2 { font-size: 1.4rem; margin-top: 2rem; }
+main.center h3 { font-size: 1.15rem; margin-top: 1.5rem; }
+main.center section { margin-bottom: 3rem; }
+main.center section > h2 { padding-bottom: 0.5rem; }
+
+aside.right {
+  grid-column: 3;
+  grid-row: 2;
+  background: var(--bg-right);
+  border-left: 1px solid var(--border);
+  padding: 1.5rem 1.2rem;
+  overflow-y: auto;
+  position: sticky;
+  top: 0;
+  height: calc(100vh - 2rem);
+  font-size: 0.92rem;
+}
+aside.right h3 {
+  font-size: 0.95rem;
+  color: var(--text-main);
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.3rem;
+}
+aside.right h3:first-child { margin-top: 0; border: none; }
+aside.right ul { list-style: none; padding: 0; }
+aside.right li { margin: 0.4em 0; font-size: 0.88rem; }
+aside.right a { color: var(--text-link); text-decoration: none; border-bottom: 1px dotted transparent; }
+aside.right a:hover { color: var(--accent-hover); border-bottom-style: dotted; }
+aside.right .quote {
+  background: var(--quote-bg);
+  border-left: 3px solid var(--quote-border);
+  padding: 0.7em 1em;
+  margin: 1em 0;
+  border-radius: 4px;
+  font-style: italic;
+  font-size: 0.88rem;
+}
+aside.right .quote .author {
+  display: block;
+  margin-top: 0.4em;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+aside.right .footnotes {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+aside.right .footnote {
+  margin: 0.6em 0;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
+/* Статус материала */
+.status-badge {
+  font-size: 0.75em;
+  padding: 0.1em 0.4em;
+  border-radius: 4px;
+  background: var(--border);
+  color: var(--text-muted);
+  margin-left: 0.5em;
+}
+.status-partial { background: #fef3c7; color: #92400e; }
+.status-complete { background: #d1fae5; color: #065f46; }
+
+/* Карточка материала */
+.material-card {
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.2em;
+  margin: 1em 0;
+}
+.material-card h3 { margin-top: 0; font-size: 1.1rem; }
+.material-card .meta { font-size: 0.82rem; color: var(--text-muted); margin: 0.4em 0; }
+.material-card .meta strong { color: var(--text-main); }
+
+/* Адаптив */
+@media (max-width: 1024px) {
+  .wrapper { grid-template-columns: 220px 1fr 240px; padding: 0.5rem; }
+  main.center { padding: 1.5rem 2rem; }
+}
+@media (max-width: 768px) {
+  .wrapper { grid-template-columns: 1fr; grid-template-rows: auto auto 1fr; }
+  nav.left, aside.right { position: static; height: auto; border: none; border-bottom: 1px solid var(--border); }
+  nav.left { grid-column: 1; grid-row: 2; }
+  main.center { grid-column: 1; grid-row: 3; border-left: none; border-right: none; }
+  aside.right { grid-column: 1; grid-row: 4; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-toggle" id="themeToggle" title="Сменить тему оформления">🌙 Темная тема</button>
+
+<div class="wrapper">
+  <header>
+    <h1>Искусственный интеллект: от биологических нейронов к когнитивным системам</h1>
+    <p class="subtitle">Открытый учебник для исследователей, разработчиков и всех, кто хочет создавать новое с ИИ</p>
+  </header>
+
+  <nav class="left" id="leftNav">
+    <h3>Разделы</h3>
+    <ul>
+      <li><a href="#sec-intro" class="nav-link">1. Введение: что такое ИИ</a></li>
+      <li><a href="#sec-neurons" class="nav-link">2. Биологические нейроны и их модели</a></li>
+      <li><a href="#sec-networks" class="nav-link">3. Нейронные сети и когнитивные архитектуры</a></li>
+      <li><a href="#sec-memory" class="nav-link">4. Память, обучение и ассоциации</a></li>
+      <li><a href="#sec-recognition" class="nav-link">5. Распознавание образов и компьютерное зрение</a></li>
+      <li><a href="#sec-robotics" class="nav-link">6. Робототехника и системы управления</a></li>
+      <li><a href="#sec-tools" class="nav-link">7. Инструменты разработки (RDK, Neuro Modeler, SDK)</a></li>
+      <li><a href="#sec-philosophy" class="nav-link">8. Философия, этика и парадигмы ИИ</a></li>
+      <li><a href="#sec-seminars" class="nav-link">9. Семинары и исследования</a></li>
+      <li><a href="#sec-files" class="nav-link">10. Библиотека файлов и ресурсы</a></li>
+    </ul>
+
+    <h3>Авторы материалов</h3>
+    <ul style="font-size:0.85rem;">
+      <li><a href="#author-potapov">А.С. Потапов</a></li>
+      <li><a href="#author-bakhshiev">А.В. Бахшиев</a></li>
+      <li><a href="#author-lyakhovetskii">В.А. Ляховецкий</a></li>
+      <li><a href="#author-solomatyn">В.Ф. Соломатин</a></li>
+      <li><a href="#author-neverov">А.С. Неверов</a></li>
+      <li><a href="#author-shalyto">А.А. Шалыто</a></li>
+      <li><a href="#author-alexandrov">В.В. Александров</a></li>
+      <li><a href="#author-redozubov">А. Редозубов</a></li>
+      <li><a href="#author-erusalimchik">Д. Ерусалимчик</a></li>
+      <li>и другие</li>
+    </ul>
+
+    <h3>Архив первоисточников</h3>
+    <ul>
+      <li><a href="../knowledge-base/ailab.ru/pages/" target="_blank">Статьи (полные тексты)</a></li>
+      <li><a href="../knowledge-base/ailab.ru/files_index.md" target="_blank">Индекс загружаемых файлов</a></li>
+      <li><a href="../knowledge-base/ailab.ru/wiki_start.md" target="_blank">Wiki — стартовая страница</a></li>
+    </ul>
+  </nav>
+
+  <main class="center" id="centerContent">
+
+    <!-- СЕКЦИЯ 1: Введение -->
+    <section id="sec-intro">
+      <h1>1. Введение: что такое ИИ и почему это важно</h1>
+
+      <div class="material-card">
+        <h3>1.1. От Machines Turing к самовоспроизводящимся автоматам</h3>
+        <p class="meta"><strong>Автор:</strong> В.В. Aleksandrov <span class="status-badge status-complete">Доктор технологических наук, профессор</span></p>
+        <p>Доктор технологических наук, профессор, лауреат премии Джона фон Неймана и премии Правительства РФ В.В. Александров рассматривает путь от классической машины Тьюринга к самовоспроизводящимся автоматам. Это фундаментальный вопрос для понимания того, могут ли машины создавать себя и эволюционировать без участия человека.</p>
+        <p><strong>Почему это полезно:</strong> даёт понимание границ вычислимости, принципов самовоспроизводства и основ для проектирования систем, которые могут модифицировать свой собственный код.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>1.2. Современные тенденции и перспективы ИИ</h3>
+        <p class="meta"><strong>Автор:</strong> А.С. Потапов <span class="status-badge status-partial">Семинар 1 (частично)</span></p>
+        <p>Потапов анализирует состояние области ИИ на рубеже 2010-х: принципиально новых идей не появлялось давно, преобладают традиционные разделы (поиск, представление знаний, машинное обучение, планирование, робототехника). Поднимается вопрос о необходимости «теории построения сложных систем» вместо фрагментарных подходов.</p>
+        <p><strong>Почему это полезно:</strong> помогает осознать, почему современный ИИ всё ещё далёк от一般го интеллекта, и какие теоретические прорывы необходимы.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>1.3. Возможна ли алгоритмическая реализация интеллекта?</h3>
+        <p class="meta"><strong>Автор:</strong> А.С. Потапов <span class="status-badge status-complete">Семинар 14</span></p>
+        <p>Дискуссия на базе идей Хьюберта Дрейфуса, Роже Пенроуза, Джона Сёрла («Китайская комната») и теоремы Гёделя. Обсуждаются ограничения вычислительных машин и необходимость новой математики для ИИ.</p>
+      </div>
+    </section>
+
+    <!-- СЕКЦИЯ 2: Нейроны -->
+    <section id="sec-neurons">
+      <h1>2. Биологические нейроны и их математические модели</h1>
+
+      <div class="material-card">
+        <h3>2.1. Обзор существующих моделей нейронов</h3>
+        <p class="meta"><strong>Источник:</strong> Обзор моделей нейронов <span class="status-badge status-partial">5 чанков (частично)</span></p>
+        <p>Классификация нейронов по топологии сети (входные, выходные, промежуточные), по степени разработки математического описания (формальные, физиологические, феноменологические), по аппаратной реализации (цифровые, аналоговые). Описана модель Маккаллока-Питтса, функции активации (пороговая, сигмоидальная, линейная).</p>
+        <p><strong>Формула активации:</strong> нейрон взвешивает входные сигналы, суммирует их и пропускает через нелинейную функцию активации. Если сумма превышает порог — нейрон разряжается.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>2.2. Модуль нейрона — от формального к импульсному</h3>
+        <p class="meta"><strong>Авторы:</strong> Бахшиев, Слизун, Гуンдельах <span class="status-badge status-complete">Обзор моделей нейронов</span></p>
+        <p>Известные модели нейронов не обладают необходимыми свойствами для моделирования естественных нейронных сетей. Предлагается моделирование на уровне аналогового преобразования импульсных потоков, без спуска на физико-химический уровень, но без абстрагирования от понятия нейрона как нелинейного аналогового преобразователя.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>2.3. Математическое моделирование импульсных потоков в естественном нейроне</h3>
+        <p class="meta"><strong>Авторы:</strong> А.В. Бахшиев, С.П. Романов <span class="status-badge status-partial">4 чанка (частично)</span></p>
+        <p>Система дифференциальных уравнений, описывающая аналоговое преобразование импульсных потоков в естественном нейроне. Модель поддерживает произвольную структуру дендритного аппарата и эффект пресинаптического торможения. Не требует настройки параметров в процессе функционирования.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>2.4. Моделирование процесса выживания нейрона</h3>
+        <p class="meta"><strong>Источник:</strong> Моделирование выживания нейрона <span class="status-badge status-partial">4 чанка (частично)</span></p>
+        <p>Нейрон как квазибиологический организм: нуждается в питании, стареет, разряд снижает возраст, между нейронами образуются связи для оптимизации состояний. Интеллектуальные свойства возникают как следствие организации энергетически выгодных форм внутреннего функционирования.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>2.5. Нейронная жизнь — квазибиологическая система</h3>
+        <p>В начале функционирования автомат — это неорганизованное множество нейронов в условиях ограниченного питания. Задача — выжить за счёт организации внутренних отношений. Свойства нейронов обеспечивают образование межнейронных связей, превращая хаос в самоподдерживающуюся сеть.</p>
+      </div>
+    </section>
+
+    <!-- СЕКЦИЯ 3: Сети и когнитивные архитектуры -->
+    <section id="sec-networks">
+      <h1>3. Нейронные сети и когнитивные архитектуры</h1>
+
+      <div class="material-card">
+        <h3>3.1. Искусственные когнитивные системы в робототехнике</h3>
+        <p class="meta"><strong>Автор:</strong> к.т.н. Л.А. Станкевич (ФТК, СПбГПУ) <span class="status-badge status-complete">Семинар 24</span></p>
+        <p>Содержание:<br>
+        1. Искусственный интеллект и когнитивная наука<br>
+        2. Когнитивистский и эмерджентный подходы<br>
+        3. Когнитивные архитектуры<br>
+        4. Гибридные когнитивные системы<br>
+        5. Средства реализации когнитивных систем<br>
+        6. Примеры применения в робототехнике</p>
+      </div>
+
+      <div class="material-card">
+        <h3>3.2. Эволюция биологических систем и построение «сильного» ИИ</h3>
+        <p class="meta"><strong>Автор:</strong> Валерий Анисимов <span class="status-badge status-complete">Семинар 16</span></p>
+        <p>Рассматриваются:<br>
+        • Как представляли «сильный» ИИ первые кибернетики (50–60-е)<br>
+        • Основные типы систем ИИ сегодня<br>
+        • Причины, препятствующие появлению «сильного» ИИ<br>
+        • Факторы эволюции биоты в сторону усложнения<br>
+        • Принципы построения оптимального «сильного» ИИ<br>
+        • Логические игры как полигон для тестирования иерархических эволюционирующих систем</p>
+      </div>
+
+      <div class="material-card">
+        <h3>3.3. Pattern Processing — обработка паттернов в информационных системах</h3>
+        <p class="meta"><strong>Автор:</strong> А. Бахшиев (Санкт-Петербургский политехнический университет) <span class="status-badge status-complete">Полная статья</span></p>
+        <p>Многоуровневая модель памяти: сенсорные данные → модуль запоминания и распознавания отдельных объектов → модуль создания ассоциаций «часть/целое» → модуль создания общих концепций (вербальная память). Динамическая 3D-модель среды формируется на основе сетей интегрирующих ассоциирующих связей.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>3.4. Нейрокогнитивная среда Neuro Modeler</h3>
+        <p class="meta"><strong>Раздел:</strong> RDK — инструменты разработки <span class="status-badge status-partial">2 чанка (частично)</span></p>
+        <p>Среда моделирования нейронных систем с произвольной структурной организацией. Ядро реализовано на ANSI C++, объектно-ориентированная библиотека с 16 классами: базовое ядро, абстракции сети, блоки (синапс, мембрана, генератор), элементы сети (нейрон, афферентный нейрон, нервное волокно, сеть).</p>
+      </div>
+    </section>
+
+    <!-- СЕКЦИЯ 4: Память и обучение -->
+    <section id="sec-memory">
+      <h1>4. Память, обучение и ассоциации</h1>
+
+      <div class="material-card">
+        <h3>4.1. Кратковременная память человека</h3>
+        <p class="meta"><strong>Автор:</strong> В.А. Ляховецкий (Институт физиологии им. И.П. Павлова) <span class="status-badge status-complete">Семинар 5</span></p>
+        <p>Модели кратковременной памяти на основе стека или ИНС. Исследование моторной памяти: при движении правой руки превалирует векторное кодирование, при левой — комбинация позиционного и векторного. Разработана гетероассоциативная модель памяти для воспроизведения распределения ошибок.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>4.2. Модели заучивания пространственной информации</h3>
+        <p class="meta"><strong>Автор:</strong> В.А. Ляховецкий <span class="status-badge status-complete">Семинар 43</span></p>
+        <p>Исследование механизмов воспроизведения и узнавания пространственной информации.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>4.3. Ассоциативная память и голограммная аналогия</h3>
+        <p class="meta"><strong>Автор:</strong> к.т.н. В.Ф. Соломатин (Институт физиологии им. И.П. Павлова РАН) <span class="status-badge status-complete">Семинар 24</span></p>
+        <p>Разработка структур ассоциативной памяти на основе анализа аналогии между свойствами голограмм и свойствами следов памяти в мозгу.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>4.4. Информационная модель волновой активности мозга</h3>
+        <p class="meta"><strong>Автор:</strong> Алексей Редозубов <span class="status-badge status-complete">Семинар 46</span></p>
+        <p>Механизм распределённой голографической памяти в волновых нейронных сетях.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>4.5. Набросок модели Фрейда-Юнга</h3>
+        <p class="meta"><strong>Автор:</strong> А.С. Неверов <span class="status-badge status-partial">2 чанка (частично)</span></p>
+        <p>Модель психических явлений на основе разделения на сознание и «бессознательное». Юнг дополняет аксиому Фрейда идеей о четырёх дифференцированных психических функциях: мышление, интуиция, чувство, ощущение. Вводится понятие психологических типов.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>4.6. Заметки к докладу: особенности активной среды</h3>
+        <p class="meta"><strong>Автор:</strong> А.С. Неверов <span class="status-badge status-complete">7 чанков, полный текст</span></p>
+        <p>Размышления о моделировании работы нейронных сетей в активной среде, логический парадокс выделения объекта из фона, кибернетическая модель ЦНС, роль памяти и моторики в восприятии.</p>
+      </div>
+    </section>
+
+    <!-- СЕКЦИЯ 5: Распознавание образов -->
+    <section id="sec-recognition">
+      <h1>5. Распознавание образов и компьютерное зрение</h1>
+
+      <div class="material-card">
+        <h3>5.1. Проблема обучения в системах компьютерного зрения</h3>
+        <p class="meta"><strong>Автор:</strong> А.С. Потапов <span class="status-badge status-complete">Семинар 9</span></p>
+        <p>Тенденции в области компьютерного зрения, байесовский критерий выбора гипотез, принцип минимальной длины описания (MDL), проблема анализа образов как задачи индуктивного вывода, «сильное» обучение как автоматический выбор представлений.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>5.2. Формализация алгоритма сравнения образов</h3>
+        <p class="meta"><strong>Автор:</strong> М.В. Безобразов <span class="status-badge status-partial">2 чанка (частично)</span></p>
+        <p>Теория разумных систем: образ — подмножество элементов органа чувств (двоичная природа: активирован/не активирован). Мера близости элементов основана на ассоциативном принципе: элементы более похожи, если чаще активировались вместе. Формула сравнения образов как средняя близость активных элементов.</p>
+        <p>Программа «Сравнение образов» на Delphi, база COIL-20 (Колумбийский университет, 1440 изображений).</p>
+      </div>
+
+      <div class="material-card">
+        <h3>5.3. Методика повышения быстродействия сопоставления изображений</h3>
+        <p class="meta"><strong>Автор:</strong> В.Ю. Пименов <span class="status-badge status-complete">Семинар 8</span></p>
+        <p>Проблема сопоставления изображений в задачах навигации мобильных роботов. Избыточность контрольных точек, функция заметности ключевых точек на основе модели системы зрительного внимания, экспериментальная проверка.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>5.4. Зрительная подсистема мозга</h3>
+        <p class="meta"><strong>Автор:</strong> Анатолий Варзанов (ГОИ) <span class="status-badge status-complete">Семинар 35</span></p>
+        <p>Исследование зрительной системы мозга.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>5.5. Эволюция: из воды на сушу</h3>
+        <p class="meta"><strong>Авторы:</strong> Дан Ерусалимчик, Ори Коэнов (Университет Бар-Илан) <span class="status-badge status-complete">Курсовая работа по искусственной жизни</span></p>
+        <p>Моделирование сценария перехода морских животных на сушу с использованием системы симуляции Framesticks. Цель — ускорение схождения генетических алгоритмов на основе фактов теории эволюции.</p>
+      </div>
+    </section>
+
+    <!-- СЕКЦИЯ 6: Робототехника -->
+    <section id="sec-robotics">
+      <h1>6. Робототехника и системы управления</h1>
+
+      <div class="material-card">
+        <h3>6.1. Автоматное программирование</h3>
+        <p class="meta"><strong>Автор:</strong> А.А. Шалыто <span class="status-badge status-complete">Семинар 7</span></p>
+        <p>Подход к разработке программных систем со сложным поведением на основе модели конечного автомата. Рассматриваются достоинства автоматного программирования при ручной разработке и генерации автоматов методами генетического программирования. Примеры во встраиваемых системах.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>6.2. Применение автоматного программирования для систем управления мобильными роботами</h3>
+        <p class="meta"><strong>Источник:</strong> Семинар 8 <span class="status-badge status-complete">Полный текст</span></p>
+        <p>Содержание:<br>
+        1. Применение автоматного программирования для управления мобильными роботами<br>
+        2. Система управления малоразмерным беспилотным вертолётом<br>
+        3. Разработка стенда для проверки алгоритмов автоматного управления<br>
+        4. Генетические алгоритмы для синтеза систем управления</p>
+      </div>
+
+      <div class="material-card">
+        <h3>6.3. Обучение координации группы роботов с подкреплением</h3>
+        <p class="meta"><strong>Авторы:</strong> Дан Ерусалимчик, Галь Каминка (Университет Бар-Илан) <span class="status-badge status-complete">Магистерская работа</span></p>
+        <p>Подход обучения с подкреплением для выбора алгоритма координации группы автономных роботов. Функция награды «Индекс Эффективности (EI)» сокращает время и ресурсы на координацию. Эксперименты с реальными роботами AIBO и в среде VR-Forces.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>6.4. Нейронные сети для распознавания в задачах навигации</h3>
+        <p>Материалы семинаров 8–9 (Пименов, Потапов) посвящены применению моделей зрительного внимания и байесовского вывода в системах компьютерного зрения для мобильных роботов.</p>
+      </div>
+    </section>
+
+    <!-- СЕКЦИЯ 7: Инструменты -->
+    <section id="sec-tools">
+      <h1>7. Инструменты разработки ИИ (RDK, Neuro Modeler, SDK)</h1>
+
+      <div class="material-card">
+        <h3>7.1. RDK — Robotics Development Kit</h3>
+        <p>Комплекс инструментов для разработки робототехнических систем. Доступные документы:<br>
+        • RDK.QuickStart.ComponentDevelopment.Ru.doc<br>
+        • RDK.QuickStart.UsingToProject.Ru.doc<br>
+        • RDK.DocumentsList.Ru.doc<br>
+        • RDK.FileStructure.Ru.doc<br>
+        • RDK.Purposes.Ru.doc<br>
+        • Исходные коды (rdk_ailabru_srconly.rar)</p>
+      </div>
+
+      <div class="material-card">
+        <h3>7.2. Neuro Modeler — среда моделирования нейронных сетей</h3>
+        <p>Доступные файлы:<br>
+        • NeuroModeler_1.2.5.zip — основная версия<br>
+        • NeuroModeler_1.2.5_exe.zip — исполняемый файл<br>
+        • NeuroModeler_UserManual.pdf — руководство пользователя<br>
+        • NeuroModelerSdk.exe — SDK<br>
+        • NeuroModelerTestProjects_1.0.zip — тестовые проекты</p>
+      </div>
+
+      <div class="material-card">
+        <h3>7.3. NMSDK и MySDK</h3>
+        <p>Библиотеки средств разработчика для нейросетевого моделирования:<br>
+        • nmsdk.zip, nmsdk_ailabru_full.rar, nmsdk_ailabru_minimum.rar, nmsdk_ailabru_srconly.rar<br>
+        • nmsdk_demo_exe.zip, nmsdk_demo_source.zip<br>
+        • NMSDK_ProgrammersGuide.pdf<br>
+        • MySDK3.zip, mysdk_ailabru_full.rar, mysdk_ailabru_srconly.rar<br>
+        • MySDK_ProgrammersGuide.pdf</p>
+      </div>
+
+      <div class="material-card">
+        <h3>7.4. NeuMarker и другие инструменты</h3>
+        <p>• NeuMarker.zip, NeuMarker_Setup.exe<br>
+        • NeuroModeler_TestProjects<br>
+        • BaseAIConcept.doc — концепция базового ИИ<br>
+        • MDL_book.pdf — книга по принципу минимальной длины описания</p>
+      </div>
+    </section>
+
+    <!-- СЕКЦИЯ 8: Философия -->
+    <section id="sec-philosophy">
+      <h1>8. Философия, этика и парадигмы ИИ</h1>
+
+      <div class="material-card">
+        <h3>8.1. Лимиты картезианской парадигмы причинно-следственной связи</h3>
+        <p class="meta"><strong>Автор:</strong> А.С. Неверов <span class="status-badge status-partial">4 чанка (частично)</span></p>
+        <p>Картезианская парадигма претендует на роль единственной материалистической научной парадигмы, но содержит внутренние ограничения: невозможно одновременно установить «следствие» с «причиной» и «связь» между ними. Нужно разделять цели установления фактов и установления закономерностей.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>8.2. Возможна ли алгоритмическая реализация интеллекта?</h3>
+        <p class="meta"><strong>Автор:</strong> А.С. Потапов <span class="status-badge status-complete">Семинар 14</span></p>
+        <p>Дискуссия на базе идей Дрейфуса, Пенроуза, Сёрла и теоремы Гёделя. Тему дискуссии:<br>
+        • Верно ли мнение Х. Дрейфуса?<br>
+        • Насколько прав Р. Пенроуз?<br>
+        • О чем говорит парадокс «Китайская комната»?<br>
+        • Накладывает ли теорема Гёделя ограничения на алгоритмический ИИ?<br>
+        • Нужна ли новая математика для ИИ?</p>
+      </div>
+
+      <div class="material-card">
+        <h3>8.3. Психические явления как отражение системных мозговых процессов</h3>
+        <p class="meta"><strong>Автор:</strong> А.А. Меклер <span class="status-badge status-complete">Семинар 28</span></p>
+        <p>Подход к пониманию психических явлений через призму системных процессов мозга.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>8.4. Структура и механизмы нарушений мышления при шизофрении</h3>
+        <p class="meta"><strong>Автор:</strong> Т.В. Чередникова <span class="status-badge status-complete">Семинары 37 и 39</span></p>
+        <p>Информационная теория мышления Л.М. Веккера, психологические механизмы нарушений при шизофрении и органических заболеваниях мозга.</p>
+      </div>
+
+      <div class="material-card">
+        <h3>8.5. Миф теории информации</h3>
+        <p class="meta"><strong>Автор:</strong> к.т.н. В.Ф. Соломатин <span class="status-badge status-complete">Семинар 30</span></p>
+        <p>Критический анализ теории информации с позиций физиологии высшей нервной деятельности.</p>
+      </div>
+    </section>
+
+    <!-- СЕКЦИЯ 9: Семинары -->
+    <section id="sec-seminars">
+      <h1>9. Семинары и исследования — краткий обзор</h1>
+
+      <p>Ниже представлен хронологический обзор ключевых семинаров, доступных в архиве:</p>
+
+      <table style="width:100%; border-collapse:collapse; margin:1em 0; font-size:0.9rem;">
+        <thead>
+          <tr style="border-bottom:2px solid var(--border);">
+            <th style="text-align:left; padding:0.5em;">Семинар</th>
+            <th style="text-align:left; padding:0.5em;">Докладчик</th>
+            <th style="text-align:left; padding:0.5em;">Тема</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:0.4em;">1-й</td><td style="padding:0.4em;">А.С. Потапов</td><td style="padding:0.4em;">Современные тенденции и перспективы ИИ</td></tr>
+          <tr><td style="padding:0.4em;">2-й</td><td style="padding:0.4em;">Анисимов, Прогариков</td><td style="padding:0.4em;">Метод принятия решений</td></tr>
+          <tr><td style="padding:0.4em;">3-й</td><td style="padding:0.4em;">А.А. Шалыто</td><td style="padding:0.4em;">Автоматное программирование</td></tr>
+          <tr><td style="padding:0.4em;">4-й</td><td style="padding:0.4em;">А.В. Бахшиев</td><td style="padding:0.4em;">Моделирование естественного нейрона</td></tr>
+          <tr><td style="padding:0.4em;">5-й</td><td style="padding:0.4em;">В.А. Ляховецкий</td><td style="padding:0.4em;">Кратковременная память человека</td></tr>
+          <tr><td style="padding:0.4em;">7-й</td><td style="padding:0.4em;">А.А. Шалыто</td><td style="padding:0.4em;">Автоматное программирование (развёрнуто)</td></tr>
+          <tr><td style="padding:0.4em;">8-й</td><td style="padding:0.4em;">Пименов В.Ю.</td><td style="padding:0.4em;">Сопоставление изображений и модели внимания</td></tr>
+          <tr><td style="padding:0.4em;">9-й</td><td style="padding:0.4em;">А.С. Потапов</td><td style="padding:0.4em;">Обучение в системах компьютерного зрения</td></tr>
+          <tr><td style="padding:0.4em;">14-й</td><td style="padding:0.4em;">А.С. Потапов</td><td style="padding:0.4em;">Алгоритмическая реализация интеллекта</td></tr>
+          <tr><td style="padding:0.4em;">16-й</td><td style="padding:0.4em;">Валерий Анисимов</td><td style="padding:0.4em;">Эволюция биологических систем и «сильный» ИИ</td></tr>
+          <tr><td style="padding:0.4em;">21-й</td><td style="padding:0.4em;">Потапов, Ляховецкий</td><td style="padding:0.4em;">Конференции распознавания образов</td></tr>
+          <tr><td style="padding:0.4em;">22-й</td><td style="padding:0.4em;">Бахшиев</td><td style="padding:0.4em;">Нейронные структуры мышечного сокращения</td></tr>
+          <tr><td style="padding:0.4em;">24-й</td><td style="padding:0.4em;">Соломатин, Станкевич</td><td style="padding:0.4em;">Ассоциативная память, когнитивные системы</td></tr>
+          <tr><td style="padding:0.4em;">28-й</td><td style="padding:0.4em;">Меклер А.А.</td><td style="padding:0.4em;">Психические явления и мозговые процессы</td></tr>
+          <tr><td style="padding:0.4em;">30-й</td><td style="padding:0.4em;">Соломатин В.Ф.</td><td style="padding:0.4em;">Миф теории информации</td></tr>
+          <tr><td style="padding:0.4em;">33-й</td><td style="padding:0.4em;">Свитенков А.</td><td style="padding:0.4em;">Сети глубокого обучения</td></tr>
+          <tr><td style="padding:0.4em;">35-й</td><td style="padding:0.4em;">Варзанов А.</td><td style="padding:0.4em;">Зрительная подсистема мозга</td></tr>
+          <tr><td style="padding:0.4em;">37-й, 39-й</td><td style="padding:0.4em;">Чередникова Т.В.</td><td style="padding:0.4em;">Нарушения мышления при шизофрении</td></tr>
+          <tr><td style="padding:0.4em;">40-й</td><td style="padding:0.4em;">Худобахшов В.</td><td style="padding:0.4em;">Специализация программ и ИИ</td></tr>
+          <tr><td style="padding:0.4em;">41-й</td><td style="padding:0.4em;">Редозубов А.</td><td style="padding:0.4em;">Память и обобщение на примере зрительной системы</td></tr>
+          <tr><td style="padding:0.4em;">42-й</td><td style="padding:0.4em;">Волынский М.А.</td><td style="padding:0.4em;">Динамическая обработка данных в ОКТ</td></tr>
+          <tr><td style="padding:0.4em;">43-й</td><td style="padding:0.4em;">Ляховецкий В.А.</td><td style="padding:0.4em;">Заучивание пространственной информации</td></tr>
+          <tr><td style="padding:0.4em;">44-й</td><td style="padding:0.4em;">Четвериков А.А.</td><td style="padding:0.4em;">Аффект, ошибки и конфликты</td></tr>
+          <tr><td style="padding:0.4em;">45-й</td><td style="padding:0.4em;">Александров В.В.</td><td style="padding:0.4em;">От машины Тьюринга к самовоспроизводящимся автоматам</td></tr>
+          <tr><td style="padding:0.4em;">46-й</td><td style="padding:0.4em;">Редозубов А.</td><td style="padding:0.4em;">Волновая активность мозга и голографическая память</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- СЕКЦИЯ 10: Файлы -->
+    <section id="sec-files">
+      <h1>10. Библиотека файлов и ресурсов</h1>
+
+      <p>Архив содержит около 130 файлов — презентации, аудиозаписи, архивы, документация. Полный индекс с именами файлов находится в разделе «Архив первоисточников» слева.</p>
+
+      <h3>Основные категории:</h3>
+      <ul>
+        <li><strong>Семинарные материалы</strong> — презентации (PPT/PPTX), аудиозаписи (WMA/MP3), архивы (ZIP/RAR) для 46 семинаров</li>
+        <li><strong>Нейросети и нейромоделирование</strong> — PDF, DOC, PPT, ZIP, EXE (Neuro Modeler, модели нейронов, обзоры)</li>
+        <li><strong>Инструменты разработки</strong> — RDK, MySDK, NMSDK с исходными кодами и руководствами</li>
+        <li><strong>Концепции ИИ</strong> — BaseAIConcept.doc, MDL_book.pdf, Dynamic_AI_2011.ppt и др.</li>
+        <li><strong>Архивы</strong> — AICommunity 2003, 2006, 2008, 2009</li>
+      </ul>
+
+      <div class="material-card">
+        <h3>Примеры файлов:</h3>
+        <ul>
+          <li>NeuroModeler_UserManual.pdf — руководство по среде моделирования нейронов</li>
+          <li>Bakhshiev_AR2005.pdf — обработка паттернов и распознавание compound объектов</li>
+          <li>MDL_book.pdf — принцип минимальной длины описания</li>
+          <li>Shalyto_AutomatProg.ppt — автоматное программирование</li>
+          <li>NMSDK_ProgrammersGuide.pdf — руководство программиста NMSDK</li>
+          <li>AICommunity2009.zip — архив сообщества 2009 года</li>
+        </ul>
+        <p class="small">Полный список файлов с именами — в разделе «Индекс загружаемых файлов» (левая панель → Архив первоисточников).</p>
+      </div>
+    </section>
+
+    <!-- Заключение -->
+    <section id="sec-conclusion">
+      <h1>Заключение: как использовать этот учебник</h1>
+      <p>Этот учебник собран на базе материалов, доступных в открытых источниках, и предназначен для:</p>
+      <ul>
+        <li><strong>Исследователей</strong> — обзор теорий нейронов, памяти, когнитивных архитектур и философии ИИ</li>
+        <li><strong>Разработчиков</strong> — инструменты RDK, Neuro Modeler, NMSDK с исходными кодами и руководствами</li>
+        <li><strong>Студентов и преподавателей</strong> — материалы семинаров, презентации, курсовые работы по ИИ и искусственной жизни</li>
+        <li><strong>Всех interested</strong> — открытый доступ к знаниям, которые можно адаптировать под новые проекты и тематики</li>
+      </ul>
+      <p>Авторы статей и семинаров указаны в соответствующих разделах. Полные тексты первоисточников хранятся в разделе «Архив первоисточников» этого репозитория.</p>
+    </section>
+
+  </main>
+
+  <aside class="right" id="rightSidebar">
+    <h3>В этом разделе</h3>
+    <ul id="sectionToc"></ul>
+
+    <h3>Ключевые цитаты</h3>
+    <div class="quote">
+      «Принципиально новых идей в области ИИ не появлялось достаточно давно»
+      <span class="author">А.С. Потапов, семинар 1</span>
+    </div>
+    <div class="quote">
+      «Интеллектуальные свойства возникают как следствия организации различных энергетически выгодных форм и режимов внутреннего функционирования»
+      <span class="author">Модель выживания нейрона</span>
+    </div>
+    <div class="quote">
+      «Образ — это подмножество некоего изначального множества. Каждый элемент множества имеет двоичную природу — либо активен, либо нет (0 или 1)»
+      <span class="author">М.В. Безобразов, Теория разумных систем</span>
+    </div>
+    <div class="quote">
+      «Картезианская парадигма, претендуя быть научной, должна разделить две разные цели: установления фактов и установления закономерностей»
+      <span class="author">А.С. Неверов, «Лимиты картезианской парадигмы»</span>
+    </div>
+
+    <h3>Авторы, чьи материалы лежат в основе учебника</h3>
+    <ul>
+      <li><a href="#author-potapov">А.С. Потапов</a> — семинары 1, 9, 14</li>
+      <li><a href="#author-bakhshiev">А.В. Бахшиев</a> — семинары 4, 22, обзоры нейронов</li>
+      <li><a href="#author-lyakhovetskii">В.А. Ляховецкий</a> — семинары 5, 21, 43</li>
+      <li><a href="#author-solomatyn">В.Ф. Соломатин</a> — семинары 24, 30</li>
+      <li><a href="#author-neverov">А.С. Неверов</a> — модель Фрейда-Юнга, заметки к докладу, лимиты картезианства</li>
+      <li><a href="#author-shalyto">А.А. Шалыто</a> — семинары 3, 7, автоматное программирование</li>
+      <li><a href="#author-alexandrov">В.В. Александров</a> — семинар 45, машины Тьюринга</li>
+      <li><a href="#author-redozubov">А. Редозубов</a> — семинары 41, 46</li>
+      <li><a href="#author-erusalimchik">Д. Ерусалимчик</a> — семинар, координация роботов, эволюция</li>
+    </ul>
+
+    <div class="footnotes">
+      <h3>Сноски и источники</h3>
+      <div class="footnote">Материалы собраны из открытых источников. Все статьи сохранены в оригинальном виде в разделе «Архив первоисточников» этого репозитория.</div>
+      <div class="footnote">Некоторые статьи доступны частично (полные версии можно найти в архиве первоисточников или у авторов).</div>
+      <div class="footnote">Авторы статей: А.С. Потапов, А.В. Бахшиев, В.А. Ляховецкий, В.Ф. Соломатин, А.С. Неверов, А.А. Шалыто, В.В. Александров, А. Редозубов, Д. Ерусалимчик, М.В. Безобразов, Т.В. Чередникова, А.А. Меклер и другие.</div>
+      <div class="footnote">Учебник распространяется открыто. GitHub Pages: включите Pages в настройках репозитория для публикации.</div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* ============================================================
+   Переключатель темы
+   ============================================================ */
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+
+// Загружаем сохранённую тему
+const savedTheme = localStorage.getItem('ailab-ai-theme');
+if (savedTheme === 'dark') {
+  html.setAttribute('data-theme', 'dark');
+  themeToggle.textContent = '☀️ Светлая тема';
+} else {
+  html.removeAttribute('data-theme');
+  themeToggle.textContent = '🌙 Темная тема';
+}
+
+themeToggle.addEventListener('click', () => {
+  const isDark = html.getAttribute('data-theme') === 'dark';
+  if (isDark) {
+    html.removeAttribute('data-theme');
+    localStorage.setItem('ailab-ai-theme', 'light');
+    themeToggle.textContent = '🌙 Темная тема';
+  } else {
+    html.setAttribute('data-theme', 'dark');
+    localStorage.setItem('ailab-ai-theme', 'dark');
+    themeToggle.textContent = '☀️ Светлая тема';
+  }
+});
+
+/* ============================================================
+   Навигация — подсветка активного раздела и оглавление справа
+   ============================================================ */
+const navLinks = document.querySelectorAll('.nav-link');
+const sections = document.querySelectorAll('main.center section');
+const sectionToc = document.getElementById('sectionToc');
+
+// Собираем h2 из контента для правого оглавления
+sections.forEach(section => {
+  const h2s = section.querySelectorAll('h2');
+  h2s.forEach(h2 => {
+    const li = document.createElement('li');
+    const a = document.createElement('a');
+    a.href = '#' + h2.id;
+    a.textContent = h2.textContent;
+    li.appendChild(a);
+    sectionToc.appendChild(li);
+  });
+});
+
+// Подсветка активной ссылки при скролле
+function highlightNav() {
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop;
+    const height = section.offsetHeight;
+    if (window.pageYOffset >= top - 150 && window.pageYOffset < top + height - 150) {
+      current = section.getAttribute('id');
+    }
+  });
+
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('href') === '#' + current) {
+      link.classList.add('active');
+    }
+  });
+}
+
+window.addEventListener('scroll', highlightNav);
+highlightNav();
+
+// Плавный переход по якорям
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+</body>
+</html>
