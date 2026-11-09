@@ -6,247 +6,269 @@
 <title>Искусственный интеллект: от биологических нейронов к когнитивным системам — учебник</title>
 <style>
 /* ============================================================
-   Академический стиль (светлая / темная тема)
+   Дизайн-система: академический учебник
+   Элегантная типографика, приглушённая палитра, минимализм
    ============================================================ */
 :root {
-  --bg-page: #f4f6f8;
-  --bg-sidebar: #ffffff;
-  --bg-content: #ffffff;
-  --bg-right: #f1f3f5;
-  --text-main: #1f2937;
-  --text-muted: #6b7280;
-  --text-link: #1d4ed8;
-  --border: #e5e7eb;
-  --accent: #2563eb;
-  --accent-hover: #1e40af;
-  --code-bg: #f1f5f9;
-  --quote-bg: #f3f4f6;
-  --quote-border: #2563eb;
-  --nav-hover: #f9fafb;
-  --nav-active: #dbeafe;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.04);
-  --shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);
-  --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: Georgia, Cambria, "Times New Roman", serif;
-  --radius: 8px;
-  --radius-sm: 4px;
+  /* Светлая тема — академическая */
+  --bg-page: #fafaf7;
+  --bg-surface: #ffffff;
+  --bg-sidebar: #f5f3f0;
+  --bg-right: #f2f0ec;
+  --text-main: #1a1817;
+  --text-muted: #5c5752;
+  --text-link: #3d4a5c;
+  --border: #d8d4ce;
+  --accent: #4a5568;
+  --accent-hover: #2d3440;
+  --code-bg: #f1eee9;
+  --quote-bg: #f4f2ee;
+  --quote-border: #8c8174;
+  --nav-hover: #efece8;
+  --nav-active: #e8e4dd;
+  --shadow: none;
+  --font-serif: "Cambria", "Georgia", "Times New Roman", "Noto Serif", serif;
+  --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --font-mono: "Courier New", "Liberation Mono", monospace;
+  --radius: 0;
+  --line-height-body: 1.75;
+  --line-height-tight: 1.4;
 }
 
 [data-theme="dark"] {
-  --bg-page: #0b1016;
-  --bg-sidebar: #111827;
-  --bg-content: #0b1016;
-  --bg-right: #111827;
-  --text-main: #f9fafb;
-  --text-muted: #9ca3af;
-  --text-link: #60a5fa;
-  --border: #374151;
-  --accent: #60a5fa;
-  --accent-hover: #3b82f6;
-  --code-bg: #1f2937;
-  --quote-bg: #1f2937;
-  --quote-border: #4f46e5;
-  --nav-hover: #1f2937;
-  --nav-active: #1e3a8a;
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.4);
-  --shadow: 0 4px 6px -1px rgba(0,0,0,0.5);
+  --bg-page: #121210;
+  --bg-surface: #1a1816;
+  --bg-sidebar: #1a1816;
+  --bg-right: #1a1816;
+  --text-main: #e7e2da;
+  --text-muted: #9c9489;
+  --text-link: #b8c0c9;
+  --border: #3a3632;
+  --accent: #b8c0c9;
+  --accent-hover: #d1d8e0;
+  --code-bg: #252220;
+  --quote-bg: #1f1d1a;
+  --quote-border: #5c544a;
+  --nav-hover: #252220;
+  --nav-active: #2d2a26;
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
 body {
-  font-family: var(--font-stack);
+  font-family: var(--font-serif);
   background: var(--bg-page);
   color: var(--text-main);
-  line-height: 1.7;
+  line-height: var(--line-height-body);
   transition: background 0.3s, color 0.3s;
-  -webkit-font-smoothing: antialiased;
 }
-a { color: var(--text-link); text-decoration: none; border-bottom: 1px dotted transparent; }
-a:hover { color: var(--accent-hover); border-bottom-style: dotted; }
+a { color: var(--text-link); text-decoration: none; border-bottom: 1px solid transparent; }
+a:hover { color: var(--accent-hover); border-bottom-color: var(--accent-hover); }
+strong { color: var(--text-main); font-weight: 600; }
 
-h1 { font-size: 2rem; margin: 1.75em 0 0.75em; border-bottom: 2px solid var(--border); padding-bottom: 0.5em; font-weight: 700; letter-spacing: -0.01em; }
-h2 { font-size: 1.45rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4em; margin: 2em 0 1em; font-weight: 600; }
-h3 { font-size: 1.2rem; margin: 1.5em 0 0.8em; color: var(--text-main); font-weight: 600; }
-h4 { font-size: 1.05rem; color: var(--text-muted); margin: 1.2em 0 0.6em; font-weight: 600; }
-p { margin: 0.75em 0; text-align: justify; }
-ul, ol { margin: 0.75em 0 0.75em 1.75em; }
-li { margin: 0.35em 0; }
-strong { color: var(--text-main); }
-
-blockquote {
-  border-left: 4px solid var(--quote-border);
-  background: var(--quote-bg);
-  padding: 0.9em 1.25em;
-  margin: 1.25em 0;
-  border-radius: 0 var(--radius) var(--radius) 0;
-  font-style: italic;
+h1 {
+  font-family: var(--font-serif);
+  font-size: 2rem;
+  margin: 2rem 0 1rem;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 0.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   color: var(--text-main);
 }
-.citation {
-  font-size: 0.82em;
-  color: var(--text-muted);
-  font-style: italic;
-  margin-top: 0.3em;
-  display: block;
+h2 {
+  font-family: var(--font-serif);
+  font-size: 1.5rem;
+  margin: 2.2rem 0 0.9rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.4rem;
+  font-weight: 600;
+  color: var(--text-main);
 }
-
+h3 {
+  font-family: var(--font-serif);
+  font-size: 1.25rem;
+  margin: 1.8rem 0 0.8rem;
+  font-weight: 600;
+  color: var(--text-main);
+}
+h4 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  margin: 1.4rem 0 0.6rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+p { margin: 0.85rem 0; text-align: justify; }
+ul, ol { margin: 0.85rem 0 0.85rem 1.75rem; }
+li { margin: 0.35rem 0; }
+blockquote {
+  margin: 1.4rem 0;
+  padding: 1rem 1.5rem;
+  border-left: 3px solid var(--quote-border);
+  background: var(--quote-bg);
+  font-style: italic;
+  color: var(--text-main);
+  font-size: 0.95em;
+}
+.citation {
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  font-style: normal;
+  margin-top: 0.3rem;
+  display: block;
+  text-align: left;
+}
 .code-block {
   background: var(--code-bg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1em 1.25em;
-  margin: 1.25em 0;
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
   overflow-x: auto;
-  font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
-  font-size: 0.88em;
+  font-family: var(--font-mono);
+  font-size: 0.85em;
   line-height: 1.55;
-  box-shadow: var(--shadow-sm);
 }
-
 .key-box {
   background: var(--quote-bg);
+  border: 1px solid var(--border);
   border-left: 4px solid var(--accent);
-  padding: 0.9em 1.25em;
-  margin: 1.25em 0;
-  border-radius: 0 var(--radius) var(--radius) 0;
-  box-shadow: var(--shadow-sm);
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+  border-radius: var(--radius);
 }
-.key-box h4 { margin-top: 0; color: var(--text-main); font-size: 1em; }
-
+.key-box h4 { margin-top: 0; color: var(--text-main); font-size: 0.95rem; text-transform: none; letter-spacing: normal; }
 .question-box {
   background: var(--bg-page);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.1em 1.25em;
-  margin: 1.25em 0;
-  box-shadow: var(--shadow-sm);
+  padding: 1.1rem 1.25rem;
+  margin: 1.25rem 0;
 }
-.question-box h4 { margin-top: 0; color: var(--text-main); font-size: 1em; }
-
+.question-box h4 { margin-top: 0; color: var(--text-main); font-size: 0.95rem; text-transform: none; letter-spacing: normal; }
 .reference-item {
-  margin: 0.6em 0;
-  padding: 0.75em 1em;
-  background: var(--bg-page);
-  border-radius: var(--radius-sm);
-  border-left: 3px solid var(--accent);
-  font-size: 0.92em;
-  box-shadow: var(--shadow-sm);
+  margin: 0.55rem 0;
+  padding: 0.65rem 0.9rem;
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.88em;
+  text-align: left;
 }
-
+.reference-item::before { content: "[" counter(ref) "] "; counter-increment: ref; font-weight: 700; color: var(--accent); }
 .glossary-item {
-  margin: 0.5em 0;
-  padding: 0.6em 0.9em;
+  margin: 0.45rem 0;
+  padding: 0.55rem 0;
   border-bottom: 1px solid var(--border);
-  font-size: 0.95em;
+  font-size: 0.92em;
 }
 .glossary-item:last-child { border-bottom: none; }
 .glossary-item .term {
-  font-weight: 700;
+  font-weight: 600;
   color: var(--accent);
-  white-space: nowrap;
+  font-family: var(--font-sans);
+  font-size: 0.88em;
 }
 .glossary-item .term::after { content: " — "; font-weight: 400; color: var(--text-muted); }
-
 .status-badge {
-  font-size: 0.72em;
-  padding: 0.08em 0.35em;
-  border-radius: var(--radius-sm);
+  font-family: var(--font-sans);
+  font-size: 0.7rem;
+  padding: 0.05em 0.3em;
+  border-radius: 1px;
   background: var(--border);
   color: var(--text-muted);
-  margin-left: 0.4em;
-  font-weight: 600;
+  margin-left: 0.35em;
+  font-weight: 500;
+  border: 1px solid var(--border);
 }
-.status-complete { background: #dcfce7; color: #166534; }
-.status-partial { background: #fef3c7; color: #92400e; }
+.status-complete { background: #e8f0e8; color: #2d5a2d; border-color: #a8c0a8; }
+.status-partial { background: #f7ede0; color: #7a5a1a; border-color: #d9c39a; }
 
-/* Тема */
+/* Переключатель темы */
 .theme-toggle {
   position: fixed;
   top: 1rem;
   right: 1rem;
   z-index: 1000;
-  background: var(--bg-sidebar);
+  background: var(--bg-surface);
   border: 1px solid var(--border);
   color: var(--text-main);
-  padding: 0.6em 1em;
+  padding: 0.55em 0.9em;
   border-radius: var(--radius);
   cursor: pointer;
-  font-size: 0.88rem;
-  box-shadow: var(--shadow);
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  box-shadow: none;
+  transition: background 0.2s, border-color 0.2s;
   display: flex;
   align-items: center;
-  gap: 0.5em;
-  transition: background 0.2s, transform 0.1s;
+  gap: 0.45em;
 }
-.theme-toggle:hover { background: var(--nav-hover); transform: translateY(-1px); }
-.theme-toggle:active { transform: translateY(0); }
+.theme-toggle:hover { border-color: var(--accent-hover); background: var(--nav-hover); }
 
 /* Заголовок */
 header {
   background: var(--bg-sidebar);
   border-bottom: 1px solid var(--border);
-  padding: 1.5rem 2rem;
+  padding: 1.75rem 2rem;
   position: sticky;
   top: 0;
   z-index: 100;
-  box-shadow: var(--shadow);
 }
-header h1 { font-size: 1.7rem; margin: 0; border: none; font-weight: 700; }
-header p.subtitle { color: var(--text-muted); font-size: 0.95rem; margin-top: 0.4rem; }
+header h1 { font-size: 1.75rem; margin: 0; border: none; font-weight: 700; letter-spacing: -0.01em; }
+header p.subtitle { color: var(--text-muted); font-size: 0.9rem; margin-top: 0.45rem; font-family: var(--font-sans); }
 
 /* Макет в три колонки — CSS Grid */
 .wrapper {
   display: grid;
   grid-template-rows: auto 1fr;
-  grid-template-columns: 260px 1fr 280px;
+  grid-template-columns: 250px 1fr 270px;
   min-height: 100vh;
-  max-width: 1400px;
+  max-width: 1500px;
   margin: 0 auto;
   gap: 0;
 }
-
-.top-row {
-  display: contents;
-}
+.top-row { display: contents; }
 
 nav.left {
   grid-row: 2;
   grid-column: 1;
   background: var(--bg-sidebar);
   border-right: 1px solid var(--border);
-  padding: 1.5rem 1rem;
+  padding: 1.75rem 1.25rem;
   overflow-y: auto;
   position: sticky;
   top: 0;
   height: 100%;
   box-sizing: border-box;
 }
-
 main.center {
   grid-row: 2;
   grid-column: 2;
-  background: var(--bg-content);
-  padding: 2rem 3rem;
+  background: var(--bg-surface);
+  padding: 2.5rem 3.5rem;
   overflow-y: auto;
   border-left: 1px solid var(--border);
   border-right: 1px solid var(--border);
   box-sizing: border-box;
   height: 100%;
 }
-
 aside.right {
   grid-row: 2;
   grid-column: 3;
   background: var(--bg-right);
   border-left: 1px solid var(--border);
-  padding: 1.5rem 1.2rem;
+  padding: 1.75rem 1.25rem;
   overflow-y: auto;
   position: sticky;
   top: 0;
   height: 100%;
   box-sizing: border-box;
-  font-size: 0.9rem;
+  font-size: 0.86rem;
 }
 
 /* Аннотация */
@@ -254,113 +276,144 @@ aside.right {
   background: var(--bg-page);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  padding: 1.5rem;
-  margin: 1.5rem 0;
-  font-size: 0.95rem;
-  box-shadow: var(--shadow-sm);
+  padding: 1.75rem;
+  margin: 1.75rem 0;
+  font-size: 0.95em;
 }
-.abstract h3 { margin-top: 0; }
+.abstract h3 { margin-top: 0; font-size: 1.1rem; }
 
 /* Титул */
 .title-block {
   text-align: center;
-  padding: 2.5rem 0;
+  padding: 3rem 0;
   border-bottom: 2px solid var(--border);
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
-.title-block h1 { border: none; font-size: 2.4rem; margin-bottom: 0.75rem; font-weight: 700; letter-spacing: -0.02em; }
-.title-block .subtitle { font-size: 1.15rem; color: var(--text-muted); display: block; margin-bottom: 1.25rem; }
-.title-block .meta { font-size: 0.9rem; color: var(--text-muted); margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.25rem; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto; }
-.title-block .meta p { margin: 0.5em 0; text-align: left; }
+.title-block h1 { border: none; font-size: 2.6rem; margin-bottom: 1rem; font-weight: 700; letter-spacing: -0.02em; }
+.title-block .subtitle { font-family: var(--font-sans); font-size: 1.2rem; color: var(--text-muted); display: block; margin-bottom: 1.5rem; }
+.title-block .meta { font-family: var(--font-sans); font-size: 0.85rem; color: var(--text-muted); margin-top: 2rem; border-top: 1px solid var(--border); padding-top: 1.5rem; text-align: left; max-width: 650px; margin-left: auto; margin-right: auto; }
+.title-block .meta p { margin: 0.55em 0; text-align: left; }
 
 /* Навигация слева */
 nav.left h3 {
-  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--text-muted);
-  margin: 1.5em 0 0.75em;
-  padding-bottom: 0.5em;
+  margin: 1.75rem 0 0.8rem;
+  padding-bottom: 0.5rem;
   border-bottom: 1px solid var(--border);
-  font-weight: 700;
+  font-weight: 600;
 }
 nav.left h3:first-child { margin-top: 0; border: none; }
 nav.left ul { list-style: none; padding: 0; }
-nav.left li { margin: 0.25em 0; }
+nav.left li { margin: 0.2rem 0; }
 nav.left a {
   display: block;
-  padding: 0.55em 0.85em;
-  border-radius: var(--radius-sm);
+  padding: 0.5em 0.75em;
+  border-radius: var(--radius);
   color: var(--text-main);
-  font-size: 0.88rem;
+  font-family: var(--font-sans);
+  font-size: 0.85rem;
   transition: background 0.15s, color 0.15s;
+  border: 1px solid transparent;
 }
-nav.left a:hover { background: var(--nav-hover); color: var(--accent); text-decoration: none; }
-nav.left a.active { background: var(--nav-active); color: var(--accent); font-weight: 600; }
+nav.left a:hover { background: var(--nav-hover); color: var(--accent-hover); border-color: var(--border); text-decoration: none; }
+nav.left a.active { background: var(--nav-active); color: var(--accent-hover); font-weight: 600; border-color: var(--accent-hover); }
 
 /* Правая панель */
 aside.right h3 {
-  font-size: 0.85rem;
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   color: var(--text-muted);
-  margin-top: 1.5rem;
-  margin-bottom: 0.75em;
+  margin-top: 1.75rem;
+  margin-bottom: 0.75rem;
   border-bottom: 1px solid var(--border);
-  padding-bottom: 0.4em;
-  font-weight: 700;
+  padding-bottom: 0.4rem;
+  font-weight: 600;
 }
 aside.right h3:first-child { margin-top: 0; border: none; }
 aside.right ul { list-style: none; padding: 0; }
 #sectionToc { max-height: 42vh; overflow-y: auto; padding-right: 0.3em; }
-aside.right li { margin: 0.4em 0; font-size: 0.86rem; }
-aside.right a { color: var(--text-link); border-bottom: 1px dotted transparent; }
-aside.right a:hover { color: var(--accent-hover); border-bottom-style: dotted; }
+aside.right li { margin: 0.4rem 0; font-size: 0.84rem; }
+aside.right a { color: var(--text-link); border-bottom: 1px solid transparent; }
+aside.right a:hover { color: var(--accent-hover); border-bottom-color: var(--accent-hover); }
 
 aside.right .quote {
   background: var(--quote-bg);
   border-left: 3px solid var(--quote-border);
-  padding: 0.8em 1em;
-  margin: 1em 0;
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  padding: 0.9em 1.1em;
+  margin: 1.1em 0;
+  border-radius: var(--radius);
   font-style: italic;
-  font-size: 0.86rem;
+  font-size: 0.84em;
   color: var(--text-main);
 }
 aside.right .quote .author {
   display: block;
-  margin-top: 0.5em;
+  margin-top: 0.55em;
   font-style: normal;
-  font-weight: 700;
-  font-size: 0.78rem;
+  font-weight: 600;
+  font-size: 0.78em;
   color: var(--text-muted);
+  font-family: var(--font-sans);
 }
 
-aside.right .footnotes h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-top: 1.5rem; margin-bottom: 0.75em; border-bottom: 1px solid var(--border); padding-bottom: 0.4em; font-weight: 700; }
+aside.right .footnotes h3 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-top: 1.75rem; margin-bottom: 0.75rem; border-bottom: 1px solid var(--border); padding-bottom: 0.4rem; font-weight: 600; }
 aside.right .footnote {
-  font-size: 0.82rem;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
   color: var(--text-muted);
   margin: 0.7em 0;
   padding-left: 0.9em;
   border-left: 2px solid var(--border);
+  line-height: 1.5;
 }
+
+/* Таблицы — академический стиль */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.1rem 0;
+  font-size: 0.9em;
+}
+table th {
+  text-align: left;
+  padding: 0.65rem 0.85rem;
+  border-bottom: 2px solid var(--border);
+  font-weight: 600;
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 0.82em;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+table td {
+  padding: 0.65rem 0.85rem;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+table tr:last-child td { border-bottom: none; }
 
 /* Адаптив */
 @media (max-width: 1024px) {
   .wrapper {
-    grid-template-rows: auto 1fr;
+    grid-template-rows: auto 1fr auto auto;
     grid-template-columns: 1fr;
   }
-  .top-row { display: contents; }
   header { grid-row: 1; grid-column: 1; }
   nav.left { grid-row: 2; grid-column: 1; position: static; height: auto; border: none; border-bottom: 1px solid var(--border); overflow-y: visible; }
-  main.center { grid-row: 3; grid-column: 1; border-left: none; border-right: none; padding: 1.5rem 2rem; }
+  main.center { grid-row: 3; grid-column: 1; border-left: none; border-right: none; padding: 1.75rem 2rem; }
   aside.right { grid-row: 4; grid-column: 1; position: static; height: auto; border: none; border-top: 1px solid var(--border); overflow-y: visible; }
 }
 
-/* Сноски */
+/* Анкор сноски */
 .footnote-anchor {
-  font-size: 0.75em;
+  font-family: var(--font-sans);
+  font-size: 0.7em;
   vertical-align: super;
   color: var(--accent);
   font-weight: 700;
@@ -369,7 +422,7 @@ aside.right .footnote {
 </head>
 <body>
 
-<button class="theme-toggle" id="themeToggle" title="Сменить тему оформления">🌙 Темная тема</button>
+<button class="theme-toggle" id="themeToggle" title="Сменить тему оформления">Тема</button>
 
 <div class="wrapper">
   <header>
@@ -591,7 +644,7 @@ Y = 1, если net > θ, иначе Y = 0
         <p class="key-box">
           <strong>Ограничение модели:</strong> бинарная активация не отражает аналоговую природу реальных нейронов, отсутствует временная суммация, нет учёта структуры дендритов.
         </p>
-        <p class="citation">См. обзор моделей нейронов, архив первоисточников (obzor-sushchestvuyushchikh-modelej-nejronov.md).</p>
+        <p class="citation">Источник: обзор моделей нейронов, архив первоисточников (obzor-sushchestvuyushchikh-modelej-nejronov.md).</p>
 
         <h2>2.3. Функции активации — обзор</h2>
         <table>
@@ -689,13 +742,14 @@ Y = 1, если net > θ, иначе Y = 0
         <h2>2.10. Предыстория импульсного нейрона (аналоговая модель Романова)</h2>
         <p>В 70-х годах С.П. Романов разработал физическую аналоговую модель нейрона на операционных усилителях. Основные постулаты:</p>
         <ul>
-          <li>Модель должна содержать динамику (пространственную и временную суммацию сигналов).</li>
-          <li>Нейроны обмениваются импульсами, внутри осуществляют аналоговое преобразование.</li>
-          <li>Сохранены особенности синаптической передачи: не мгновенная передача, пресинаптическое торможение, нарушение равновесного состояния мембраны.</li>
-          <li>Равновесное состояние мембраны — несколько противодействующих процессов.</li>
-          <li>Эффективность взаимодействия настраивается через добавление/удаление синапсов, а не корректировку веса.</li>
-          <li>Структура мембраны настраиваемая (размером-сома, дендриты, эффективность синапсов зависит от длины дендрита).</li>
-          <li>Порог активации отсутствует или фиксирован.</li>
+          <li>Модель нейрона должна содержать динамику, т.е. обеспечивать не только пространственную, но и временную суммацию сигналов.</li>
+          <li>Нейроны должен представлять собой сущности, обменивающиеся импульсами между собой, внутри осуществляющие аналоговое преобразование.</li>
+          <li>Необходимо сохранить некоторые специфические особенности синаптической передачи, например, тот факт, что передача сигнала происходит не мгновенно; существует пресинаптическое торможение; активный синапс приводит к нарушению некоторого равновесного состояния мембраны.</li>
+          <li>Равновесное состояние мембраны обеспечивается несколькими противодействующими друг другу процессами.</li>
+          <li>Эффективность взаимодействия между нейронами должна настраиваться через добавление/удаление синапсов, а не корректировку параметра-веса синапса.</li>
+          <li>Структура мембраны нейрона должна иметь настраиваемую структуру, отражающую некоторые реальные особенности нейрона.</li>
+          <li>Порог активации нейрона отсутствует или фиксирован.</li>
+          <li>Модель нейрона должна воспроизводить некоторые основные паттерны поведения в ответ на возбуждающие и тормозящие воздействия, присущие реальным нейронам.</li>
         </ul>
         <p>Аналоговая схема использовала интеграторы и управляемые ключи для моделирования синаптического аппарата, RC-цепочки для натриевого и калиевого насосов, операционные усилители для суммирования ВПСП/ТПСП и генерации потенциала действия.</p>
         <p class="citation">Источник: «Предыстория импульсного нейрона», архив первоисточников (predystoriya-impulsnogo-nejrona.md).</p>
@@ -731,13 +785,18 @@ Y = 1, если net > θ, иначе Y = 0
         <p class="citation">Источник: «Моделирование выживания нейрона», архив первоисточников (modelirovanie-vyzhivaniya-nejrona.md).</p>
 
         <h2>2.12. Биоподобные нейронные сети для управления роботами</h2>
-        <p>Концепция применения биоподобных моделей для управления робототехническими системами включает:</p>
-        <ul>
-          <li><strong>RCN (Regulatory Control Network)</strong> — сеть регулятора, обеспечивает информацию о текущем положении объекта и переход в заданное положение.</li>
-          <li><strong>PCN (Position Control Network)</strong> — сеть позиционирования, запоминает и воспроизводит конкретные положения элементов исполнительной системы.</li>
-          <li><strong>TCN (Trajectory Control Network)</strong> — сеть управления движением по траектории, моделирует сложные траектории.</li>
-        </ul>
-        <p>Основная идея: нейросетевая система управления воспринимает информацию от сенсоров и замкнута на среду через эффекторы. Решение только одной частной задачи (например, распознавание образов) резко сужает контекст использования информации.</p>
+        <p>Концепция применения биоподобных моделей нейронных сетей для управления робототехническими системами включает два взаимно дополняющих подхода:</p>
+        <ol>
+          <li><strong>Заимствование информации о нейронных структурах</strong> с известной морфологией и функцией, построение их моделей и применение полученных знаний для решения аналогичных задач в управлении техническими системами.</li>
+          <li><strong>Разработка нейросетевых архитектур</strong> на основе накопленных знаний о принципах организации биологических НС с последующим поиском сходства или расхождения с реальностью и коррекцией моделей.</li>
+        </ol>
+        <p>В основе концепции — разработка нейросетевой системы управления, воспринимающей информацию от сенсоров и замкнутой на среду через эффекторы. Решение только одной частной задачи (например, распознавание образов) резко сужает контекст использования информации.</p>
+        <table>
+          <tr><th>Уровень</th><th>Назначение</th></tr>
+          <tr><td>RCN (Regulatory Control Network)</td><td>Сеть регулятора: предоставляет информацию о текущем положении объекта управления и обеспечивает переход в заданное положение</td></tr>
+          <tr><td>PCN (Position Control Network)</td><td>Сеть позиционирования: запоминает и воспроизводит конкретные положения элементов исполнительной системы</td></tr>
+          <tr><td>TCN (Trajectory Control Network)</td><td>Сеть управления движением по траектории: моделирует сложные траектории движения</td></tr>
+        </table>
         <p class="citation">Источник: «Концепция применения биоподобных моделей нейронных сетей», архив первоисточников (kontseptsiya-biopodobnyh-ns.md).</p>
       </section>
 
@@ -855,7 +914,7 @@ Y = 1, если net > θ, иначе Y = 0
         <p>Концепция применения биоподобных моделей нейронных сетей для управления робототехническими системами включает два взаимно дополняющих подхода:</p>
         <ol>
           <li><strong>Заимствование информации о нейронных структурах</strong> с известной морфологией и функцией, построение их моделей и применение полученных знаний для решения аналогичных задач в управлении техническими системами.</li>
-          <li><strong>Разработка нейросетевых архитектур</strong> на основе накопленных знаний о принципах организации биологических НС, с последующим поиском сходства или расхождения с реальностью и коррекцией моделей.</li>
+          <li><strong>Разработка нейросетевых архитектур</strong> на основе накопленных знаний о принципах организации биологических НС с последующим поиском сходства или расхождения с реальностью и коррекцией моделей.</li>
         </ol>
         <p>В основе концепции — разработка нейросетевой системы управления, воспринимающей информацию от сенсоров и замкнутой на среду через эффекторы. Решение только одной частной задачи (например, распознавание образов) резко сужает контекст использования информации.</p>
         <table>
@@ -869,7 +928,7 @@ Y = 1, если net > θ, иначе Y = 0
         <h2>3.7. Вывод главы</h2>
         <div class="key-box">
           <h4>Главный вывод</h4>
-          <p>Память в нейросетях организована иерархически — от сенсорных данных к абстрактнымконцепциям. Каждый уровень образует нейронные ансамбли, связи между которыми позволяют восстанавливать образы по частичным признакам и обобщать их в концепции. Когнитивные архитектуры могут быть когнитивистскими, эмерджентными и гибридными. Для практического моделирования созданы специализированные среды (Neuro Modeler) с объектно-ориентированной архитектурой на 16 классах.</p>
+          <p>Память в нейросетях организована иерархически — от сенсорных данных к абстрактным концепциям. Каждый уровень образует нейронные ансамбли, связи между которыми позволяют восстанавливать образы по частичным признакам и обобщать их в концепции. Когнитивные архитектуры могут быть когнитивистскими, эмерджентными и гибридными. Для практического моделирования созданы специализированные среды (Neuro Modeler) с объектно-ориентированной архитектурой на 16 классах.</p>
         </div>
         <p class="citation">Источник: статьи Бахшиева (article_0019.md), Станкевича (article_0122.md), Анисимова (article_0092.md), Neuro Modeler (article_0021.md).</p>
       </section>
@@ -894,7 +953,7 @@ Y = 1, если net > θ, иначе Y = 0
         <p>В докладе Ляховецкого рассмотрена методика изучения кратковременной моторной памяти человека, позволяющая исследовать роль различных признаков (координаты рабочей точки / характеристики вектора движения) при запоминании последовательности движений левой и правой руки.</p>
         <p>На основе анализа результатов опытов можно заключить, что:</p>
         <ul>
-          <li>при работе правой руки превалирует система <strong>векторного кодирования</strong> (запоминаются направление и длина перемещения);</li>
+          <li>при работе правой руки превалирует систему <strong>векторного кодирования</strong> (запоминаются направление и длина перемещения);</li>
           <li>при запоминании движений левой руки одновременно применяются и система векторного, и система позиционного кодирования.</li>
         </ul>
         <p>На базе математического аппарата нейронных сетей типа гетероассоциативная память была разработана модель, позволяющая воспроизвести распределения ошибок при однократном воспроизведении запомненной последовательности движений левой и правой руки. При моделировании запоминания движений правой руки использовалось векторное кодирование, при моделировании запоминания движений левой руки — и позиционное, и векторное кодирование.</p>
@@ -1217,7 +1276,7 @@ EI = оценка скорости затрат ресурсов на коорд
 
         <h2>7.7. Статистика по типам файлов</h2>
         <table>
-          <tr><th>Тип файла</th><td>Количество</th></tr>
+          <tr><th>Тип файла</th><td>Количество</td></tr>
           <tr><td>PDF</td><td>~25 файлов</td></tr>
           <tr><td>PPT/PPTX</td><td>~25 файлов</td></tr>
           <tr><td>WMA</td><td>~20 файлов</td></tr>
@@ -1337,38 +1396,30 @@ EI = оценка скорости затрат ресурсов на коорд
       <section id="references">
         <h1>Список литературы</h1>
         <p>Ниже приведены первоисточники, использованные при составлении учебника. Полные тексты статей хранятся в разделе «Архив первоисточников» этого репозитория (папка <code>knowledge-base/ailab.ru/pages/</code>).</p>
-
-        <div class="reference-item"><strong>[1]</strong> Потапов А.С. Современные тенденции и перспективы области искусственного интеллекта. // Материалы 1-го семинара AI Lab. — Архив первоисточников. — id=39.</div>
-        <div class="reference-item"><strong>[2]</strong> Потапов А.С. Возможна ли алгоритмическая реализация интеллекта, и каковы её ограничения. // Материалы 14-го семинара AI Lab. — Архив первоисточников. — id=75.</div>
-        <div class="reference-item"><strong>[3]</strong> Бахшиев А.В., Романов С.П. Математическое моделирование процессов преобразования импульсных потоков в естественном нейроне. // Архив первоисточников. — id=18. (частично)</div>
-        <div class="reference-item"><strong>[4]</strong> Бахшиев А. Pattern processing of information systems using prospects for compound objects recognition. // Архив первоисточников. — id=19.</div>
-        <div class="reference-item"><strong>[5]</strong> Бахшиев А.В., Слизун, Гунделах. Обзор существующих моделей нейронов. // Архив первоисточников. — id=155. (частично)</div>
-        <div class="reference-item"><strong>[6]</strong> Ляховецкий В.А. Кратковременная память человека. // Материалы 5-го семинара AI Lab. — Архив первоисточников. — id=35.</div>
-        <div class="reference-item"><strong>[7]</strong> Ляховецкий В.А. Модели заучивания пространственной информации при воспроизведении и узнавании. // Материалы 43-го семинара AI Lab. — Архив первоисточников. — id=142.</div>
-        <div class="reference-item"><strong>[8]</strong> Соломатин В.Ф. Разработка структур ассоциативной памяти на основе анализа аналогии между свойствами голограмм и свойствами следов памяти в мозгу. // Материалы 24-го семинара AI Lab. — Архив первоисточников. — id=112.</div>
-        <div class="reference-item"><strong>[9]</strong> Соломатин В.Ф. Миф теории информации. // Материалы 30-го семинара AI Lab. — Архив первоисточников. — id=128.</div>
-        <div class="reference-item"><strong>[10]</strong> Неверов А.С. Набросок модели Фрейда-Юнга. // Архив первоисточников. — id=123. (частично)</div>
-        <div class="reference-item"><strong>[11]</strong> Неверов А.С. Лимиты картезианской парадигмы причинно-следственной связи. // Архив первоисточников. — id=100. (частично)</div>
-        <div class="reference-item"><strong>[12]</strong> Неверов А.С. Заметки к докладу «Особенности активной среды». // Архив первоисточников. — id=85.</div>
-        <div class="reference-item"><strong>[13]</strong> Шалыто А.А. Автоматное программирование. // Материалы семинаров 3 и 7 AI Lab. — Архив первоисточников. — id=50.</div>
-        <div class="reference-item"><strong>[14]</strong> Ерусалимчик Д., Каминка Г. Обучение координации с подкреплением группы роботов на основе измерения скорости затрат ресурсов. // Архив первоисточников. — id=55.</div>
-        <div class="reference-item"><strong>[15]</strong> Редозубов А. Информационная модель волновой активности мозга. Механизм распределённой голографической памяти в волновых нейронных сетях. // Материалы 46-го семинара AI Lab. — Архив первоисточников. — id=151.</div>
-        <div class="reference-item"><strong>[16]</strong> Александров В.В. От машины Тьюринга к самовоспроизводящимся автоматам Гёте. // Материалы 45-го семинара AI Lab. — Архив первоисточников. — id=150.</div>
-        <div class="reference-item"><strong>[17]</strong> Станкевич Л.А. Искусственные когнитивные системы в робототехнике. // Материалы 24-го семинара AI Lab. — Архив первоисточников. — id=122.</div>
-        <div class="reference-item"><strong>[18]</strong> Анисимов В. Эволюция биологических систем и проблема построения «сильного» ИИ. // Материалы 16-го семинара AI Lab. — Архив первоисточников. — id=92.</div>
-        <div class="reference-item"><strong>[19]</strong> Меклер А.А. Психические явления как отражение системных мозговых процессов. // Материалы 28-го семинара AI Lab. — Архив первоисточников. — id=113.</div>
-        <div class="reference-item"><strong>[20]</strong> Чередникова Т.В. Структура и механизмы нарушений мышления при шизофрении. // Материалы семинаров 37 и 39 AI Lab. — Архив первоисточников. — id=141, id=144.</div>
-        <div class="reference-item"><strong>[21]</strong> Безобразов М.В. Формализация алгоритма сравнения образов в рамках Теории разумных систем. // Архив первоисточников. — id=93. (частично)</div>
-        <div class="reference-item"><strong>[22]</strong> Пименов В.Ю. Методика повышения быстродействия сопоставления изображений. // Материалы 8-го семинара AI Lab. — Архив первоисточников. — id=60.</div>
-        <div class="reference-item"><strong>[23]</strong> Свитенков А. Сети глубокого обучения. // Материалы 33-го семинара AI Lab. — Архив первоисточников. — id=107.</div>
-        <div class="reference-item"><strong>[24]</strong> Варданов А. Зрительная подсистема мозга. // Материалы 35-го семинара AI Lab. — Архив первоисточников. — id=133.</div>
-        <div class="reference-item"><strong>[25]</strong> Четвериков А.А. Аффект, ошибки и конфликты. // Материалы 44-го семинара AI Lab. — Архив первоисточников. — id=144.</div>
-        <div class="reference-item"><strong>[26]</strong> Худобахшов В. Специализация программ с интерпретативным поведением и искусственный интеллект. // Материалы 40-го семинара AI Lab. — Архив первоисточников. — id=145.</div>
-        <div class="reference-item"><strong>[27]</strong> Волынский М.А. Методы динамической обработки данных в оптической когерентной томографии. // Материалы 42-го семинара AI Lab. — Архив первоисточников. — id=146.</div>
-        <div class="reference-item"><strong>[28]</strong> Ерусалимчик Д., Коэнов О. Эволюция: из воды на сушу. // Курсовая работа по искусственной жизни. Университет Бар-Илан. — Архив первоисточников. — id=57.</div>
-        <div class="reference-item"><strong>[29]</strong> AI Lab. Архив загружаемых файлов. // Архив первоисточников, папка media/dmdocuments/. — ~130 файлов: презентации, аудиозаписи, архивы, документация.</div>
-        <div class="reference-item"><strong>[30]</strong> AI Lab. Wiki проекта. // Архив первоисточников, раздел wiki.</div>
-        <p class="small" style="color: var(--text-muted); font-size: 0.85em; margin-top: 1rem;">Примечание: статьи с пометкой «(частично)» доступны в репозитории не полностью из-за ограничений сервера при постраничной загрузке. Полные версии можно запросить у авторов или найти на оригинальном сайте.</p>
+        <div class="reference-item">Потапов А.С. Современные тенденции и перспективы области искусственного интеллекта. // Материалы 1-го семинара AI Lab. — Архив первоисточников. — id=39.</div>
+        <div class="reference-item">Потапов А.С. Возможна ли алгоритмическая реализация интеллекта, и каковы её ограничения. // Материалы 14-го семинара AI Lab. — Архив первоисточников. — id=75.</div>
+        <div class="reference-item">Бахшиев А.В., Романов С.П. Математическое моделирование процессов преобразования импульсных потоков в естественном нейроне. // Архив первоисточников. — id=18. (частично)</div>
+        <div class="reference-item">Бахшиев А. Pattern processing of information systems using prospects for compound objects recognition. // Архив первоисточников. — id=19.</div>
+        <div class="reference-item">Бахшиев А.В., Слизун, Гунделах. Обзор существующих моделей нейронов. // Архив первоисточников. — id=155. (частично)</div>
+        <div class="reference-item">Ляховецкий В.А. Кратковременная память человека. // Материалы 5-го семинара AI Lab. — Архив первоисточников. — id=35.</div>
+        <div class="reference-item">Ляховецкий В.А. Модели заучивания пространственной информации при воспроизведении и узнавании. // Материалы 43-го семинара AI Lab. — Архив первоисточников. — id=142.</div>
+        <div class="reference-item">Соломатин В.Ф. Разработка структур ассоциативной памяти на основе анализа аналогии между свойствами голограмм и свойствами следов памяти в мозгу. // Материалы 24-го семинара AI Lab. — Архив первоисточников. — id=112.</div>
+        <div class="reference-item">Неверов А.С. Набросок модели Фрейда-Юнга. // Архив первоисточников. — id=123. (частично)</div>
+        <div class="reference-item">Неверов А.С. Лимиты картезианской парадигмы причинно-следственной связи. // Архив первоисточников. — id=100. (частично)</div>
+        <div class="reference-item">Неверов А.С. Заметки к докладу «Особенности активной среды». // Архив первоисточников. — id=85.</div>
+        <div class="reference-item">Неверов А.С. Простая память: сложная система с дифференцированной информацией. // Архив первоисточников. — id=5-9, 5-10.</div>
+        <div class="reference-item">Шалыто А.А. Автоматное программирование. // Материалы семинаров 3 и 7 AI Lab. — Архив первоисточников. — id=50.</div>
+        <div class="reference-item">Ерусалимчик Д., Каминка Г. Обучение координации с подкреплением группы роботов на основе измерения скорости затрат ресурсов. // Архив первоисточников. — id=55.</div>
+        <div class="reference-item">Редозубов А. Информационная модель волновой активности мозга. Механизм распределённой голографической памяти в волновых нейронных сетях. // Материалы 46-го семинара AI Lab. — Архив первоисточников. — id=151.</div>
+        <div class="reference-item">Александров В.В. От машины Тьюринга к самовоспроизводящимся автоматам Гёте. // Материалы 45-го семинара AI Lab. — Архив первоисточников. — id=150.</div>
+        <div class="reference-item">Станкевич Л.А. Искусственные когнитивные системы в робототехнике. // Материалы 24-го семинара AI Lab. — Архив первоисточников. — id=122.</div>
+        <div class="reference-item">Анисимов В. Эволюция биологических систем и проблема построения «сильного» ИИ. // Материалы 16-го семинара AI Lab. — Архив первоисточников. — id=92.</div>
+        <div class="reference-item">Меклер А.А. Психические явления как отражение системных мозговых процессов. // Материалы 28-го семинара AI Lab. — Архив первоисточников. — id=113.</div>
+        <div class="reference-item">Безобразов М.В. Формализация алгоритма сравнения образов в рамках Теории разумных систем. // Архив первоисточников. — id=93. (частично)</div>
+        <div class="reference-item">Пименов В.Ю. Методика повышения быстродействия сопоставления изображений. // Материалы 8-го семинара AI Lab. — Архив первоисточников. — id=60.</div>
+        <div class="reference-item">AI Lab. Архив загружаемых файлов. // Архив первоисточников, папка media/dmdocuments/. — ~130 файлов: презентации, аудиозаписи, архивы, документация.</div>
+        <div class="reference-item">AI Lab. Wiki проекта. // Архив первоисточников, раздел wiki.</div>
+        <p style="font-size:0.82em; color:var(--text-muted); margin-top:1.2rem; font-family:var(--font-sans);">Примечание: статьи с пометкой «(частично)» доступны в репозитории не полностью из-за ограничений сервера при постраничной загрузке. Полные версии можно запросить у авторов или найти на оригинальном сайте.</p>
       </section>
 
       <!-- Контрольные вопросы -->
@@ -1520,21 +1571,21 @@ const html = document.documentElement;
 const savedTheme = localStorage.getItem('ailab-ai-theme');
 if (savedTheme === 'dark') {
   html.setAttribute('data-theme', 'dark');
-  themeToggle.textContent = '☀️ Светлая тема';
+  themeToggle.textContent = 'Тема: светлая';
 } else {
   html.removeAttribute('data-theme');
-  themeToggle.textContent = '🌙 Темная тема';
+  themeToggle.textContent = 'Тема: тёмная';
 }
 themeToggle.addEventListener('click', () => {
   const isDark = html.getAttribute('data-theme') === 'dark';
   if (isDark) {
     html.removeAttribute('data-theme');
     localStorage.setItem('ailab-ai-theme', 'light');
-    themeToggle.textContent = '🌙 Темная тема';
+    themeToggle.textContent = 'Тема: тёмная';
   } else {
     html.setAttribute('data-theme', 'dark');
     localStorage.setItem('ailab-ai-theme', 'dark');
-    themeToggle.textContent = '☀️ Светлая тема';
+    themeToggle.textContent = 'Тема: светлая';
   }
 });
 
